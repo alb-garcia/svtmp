@@ -565,12 +565,40 @@ def package(name: str, body: str | List[str], debug : bool = False):
     return s_pack
 
 def assign(lhs: str,rhs: str, debug: bool = False):
+    """ generates an continuous assignment statement.
+    
+    Example::
+    
+      >> assign('a', ui2h(64,16))
+         "assign a = 16'h0040;"
+
+    Arguments:
+        lhs : left-hand side of the assigment.
+        rhs : right hand side of the assignment.
+
+    Returns: a string with the assign statement.
+    """
     s_assign = f'assign {lhs} = {rhs};'
     if debug:
         log.debug('SVTMP - assign: {s_assign}')
     return s_assign
 
 def const(typ: str, lhs: str,rhs: str, cmt: str = '', debug: bool = False):
+    """ generates a constant declaration.
+
+    Example::
+
+      >> const(typ = 'real', lhs = 'T', rhs = 25.0 , cmt = 'this is a comment')
+         'const real T = 25.0; // this is a comment;'
+
+    Arguments:
+        typ : type of the constant
+        lhs : constant name
+        rhs : constant value
+        cmt : comment after constant
+
+    Returns: a constant declaration.
+    """
     s_const = f'const {typ} {lhs} = {rhs}; {comment(cmt)};'
     if debug:
         log.debug(f'SVTMP - constant declaration: {s_const}')
