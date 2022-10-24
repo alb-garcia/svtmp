@@ -2,7 +2,7 @@
 svmpt
 #######
 
-**svtmp** is a collection of SystemVerilog template (snippet) functions for
+**svtmp** is a collection of SystemVerilog snippet functions for
 easy automated code generation. **svtmp** solves some problems in code generation:
 
 * **svtmp** snippets are composable, indent-wise: no need to care about indentation
@@ -23,13 +23,10 @@ This code snippet
 		
     from svtmp import *   # import the svtmp
     t = SVTxt()           # create a SystemVerilog text instance
-    # I/Os for the SV module
-    ios = [Input(s) for s in 'clk_i','reset_n_i','di'] + [Output('do')]
-
-    t.add(always_ff(eq('do',ui2b(0,1)), eq('do','di'))) #add always_ff block
-
-    t.to_module('dff', ios = ios) #wrap SV into a module
-
+    ios = inputs(['clk_i','reset_n_i','di']) + [Output('do')] #I/Os for SV module
+    
+    t.add(always_ff(eq('do',ui2b(0,1)), eq('do','di')))    #add always_ff block
+    t.to_module('dff', ios = ios)                          #wrap SV into a module
     t.to_sv_file('dff', desc = 'Flip Flop implementation') # write to file
 
 

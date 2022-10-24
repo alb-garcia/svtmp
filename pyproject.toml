@@ -1,0 +1,20 @@
+[project]
+
+name = "svtmp"
+description = "SystemVerilog snippet functions for automatic code generation"
+version = "0.0.1"
+authors = [{name = "Alberto Garcia Izquierdo"}]
+license = {file = "LICENSE"}
+readme = "README.rst"
+requires-python = ">3.6"
+
+dependencies = []
+
+[project.urls]
+repository    = "https://github.com/alb-garcia/svtmp"
+home          = "https://github.com/alb-garcia/svtmp"
+documentation = "https://github.com/alb-garcia/svtmp"
+
+[build-system]
+requires = ["setuptools>=43.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
