@@ -1,8 +1,21 @@
+|pic1| |pic2|
+
+.. |pic1|  image:: https://raw.githubusercontent.com/alb-garcia/nix_shell_utils/main/docs/img/python.svg?
+		   
+.. |pic2|  image:: https://raw.githubusercontent.com/alb-garcia/nix_shell_utils/main/docs/img/tag.svg?
+
+
 svtmp - template functions for SystemVerilog
 ==========================================================
 
 **svtmp** is a package with small templating functions for SystemVerilog. It takes care of
-indentation, header insertion in files, and 
+indentation, header insertion in files, conversion from integer to SV hex/bin, and most
+tiresome stuff when automatically generating SystemVerilog code.
+
+**svtmp** is not meant to be a complete SV-generation solution: it just implements most
+common snippets necessary for common RTL automated blocks: address decoders, register maps,
+module ports, and all the necessary small snippets to do so (always_ff/comb, case, if/else,
+etc).
 
 Dependencies
 -------------

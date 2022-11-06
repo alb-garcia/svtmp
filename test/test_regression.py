@@ -1,8 +1,10 @@
 import pytest
 from svtmp import *
+from datetime import date
 
 def test_header():
-    hout = '/*------------------------------------------------------------------------------\n |  Title   : name\n |  Project : project\n +------------------------------------------------------------------------------\n |  Automatically generated with svtmp python library\n |\n +------------------------------------------------------------------------------\n |  Description:\n |  description\n +------------------------------------------------------------------------------\n | File     : name.sv\n | Language : SystemVerilog\n | Created  : 2022-11-02\n +------------------------------------------------------------------------------\n |  Copyright (c) Infineon Technologies AG 2022 -  Confidential\n +------------------------------------------------------------------------------\n */\n'
+    sdate = date.today().isoformat()
+    hout = f'/*------------------------------------------------------------------------------\n |  Title   : name\n |  Project : project\n +------------------------------------------------------------------------------\n |  Automatically generated with svtmp python library\n |\n +------------------------------------------------------------------------------\n |  Description:\n |  description\n +------------------------------------------------------------------------------\n | File     : name.sv\n | Language : SystemVerilog\n | Created  : {sdate}\n +------------------------------------------------------------------------------\n |  Copyright (c) Infineon Technologies AG 2022 -  Confidential\n +------------------------------------------------------------------------------\n */\n'
     assert hout == header('name', 'name.sv', 'description', 'project')
 
 def test_numbers():

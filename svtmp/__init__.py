@@ -1,3 +1,5 @@
+from __future__ import annotations # for compatibility with python 3.7-3.9
+
 """
 **svtmp** is a collection of small SystemVerilog templates to ease the automatic
 generation of SystemVerilog code.
@@ -8,13 +10,15 @@ Dependencies
 
 None. The module is standalone (other than Python standard library)
 
-Python version required: *3.8+*
+Python version required: *3.7+*
 
 =============
 Installation
 =============
 
-Simple: copy the file ``svtmp.py`` in the folder where you need the functionality, and start hacking!
+Simple::
+
+    pip install svtmp
 
 =============
 The module
@@ -203,9 +207,7 @@ Module contents
 # indentation level: change to meet your site coding style
 
 SVTMP_INDENTATION_WIDTH = 3
-""" indentation width in spaces for all templates in ``svtmp``.
-Change locally to meet your site coding style.
-"""
+""" indentation width in spaces for all templates in ``svtmp``."""
 ##################################################################
 
 import logging as log
@@ -214,8 +216,7 @@ from datetime import date
 import os
 
 INDENT = SVTMP_INDENTATION_WIDTH * ' '
-""" default indentation for all templates in svtmp.
-``INDENT = SVTMP_INDENTATION_WIDTH * ' '``"""
+""" default indentation for all templates in svtmp. ``INDENT = SVTMP_INDENTATION_WIDTH * ' '``"""
 
 def header(name: str, fname: str, desc: str, prj: str) -> str:
     """ generates a SystemVerilog file header.
@@ -826,31 +827,31 @@ def indent(fragment: List[str] | str, spaces:str = INDENT, first:str = INDENT) -
     return '\n'.join(indented_items)
 
 def block(s: str | List[str]) -> str:
-    """ takes a newline separated string of commands or a list of string commands, and
-         returns a newline separated string of indented commands, wrapped by begin-end if necessary.
+    """ takes a newline separated string of commands or a list of string commands, and returns a newline separated string of indented commands, wrapped by begin-end if necessary.
 
     Examples::
       
-      >> print(block("a = 1")) # assuming SVTMP_INDENTATION_WIDTH = 3
-            a = 1
+          >> print(block("a = 1")) 
+                a = 1
 
-      >> print(block('a = 1\nb = 2'))
-         begin
-            a = 1
-            b = 2
-         end
+          >> print(block('a = 1\\nb = 2'))
+             begin
+                a = 1
+                b = 2
+             end
 
-      >> stmts = ['a = 1', 'b = 2']
-      >> print(block(stmts))
-         begin
-            a = 1
-            b = 2
-         end
+          >> stmts = ['a = 1', 'b = 2']
+          >> print(block(stmts))
+             begin
+                a = 1
+                b = 2
+             end
 
     Arguments:
         s : a string of newline separated statements or a list of statement strings
 
-    Returns: an indented, possibly wrapped in begin-end string with the input statements
+    Returns: 
+        an indented, possibly wrapped in begin-end string with the input statements
     """
     if isinstance(s, str):
         if '\n' in s[:-1]: #more than 2 lines
