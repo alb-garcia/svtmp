@@ -5,6 +5,7 @@ from nix_shell_utils import *
 rm('*~')
 with cd('docs'): rm('*~')
 with cd('svtmp'): rm('*~')
+with cd('test'): rm('*~')
 
 
     
