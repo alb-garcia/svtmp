@@ -2,7 +2,13 @@ svtmp - template functions for SystemVerilog
 ==========================================================
 
 **svtmp** is a package with small templating functions for SystemVerilog. It takes care of
-indentation, header insertion in files, and 
+indentation, header insertion in files, conversion from integer to SV hex/bin, and most
+tiresome stuff when automatically generating SystemVerilog code.
+
+**svtmp** is not meant to be a complete SV-generation solution: it just implements most
+common snippets necessary for common RTL automated blocks: address decoders, register maps,
+module ports, and all the necessary small snippets to do so (always_ff/comb, case, if/else,
+etc).
 
 Dependencies
 -------------
@@ -17,9 +23,11 @@ Dependencies
 Installation
 -------------
 
-Simply type ::
+Simply type:
 
-  pip install svtmp
+.. code-block:: console
+		
+    pip install svtmp
 
   
 Documentation
@@ -207,8 +215,8 @@ To generate the documentation (assuming the clone repository lives @ ``$SVTMP_DI
     cd $SVTMP_DIR/docs
     make html
 
-the documentation can be then accessed @ ``$NIX_SHELL_UTILS_DIR/docs/_build/html/index.htm``
-
+the documentation can be then accessed @ ``$SVTMP_DIR/docs/_build/html/index.htm``
+    
     
 Package Documentation
 ===========================================
