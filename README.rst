@@ -1,8 +1,8 @@
 |pic1| |pic2|
 
-.. |pic1|  image:: https://raw.githubusercontent.com/alb-garcia/nix_shell_utils/main/docs/img/python.svg?
+.. |pic1|  image:: https://raw.githubusercontent.com/alb-garcia/svtmp/main/docs/img/python.svg?
 		   
-.. |pic2|  image:: https://raw.githubusercontent.com/alb-garcia/nix_shell_utils/main/docs/img/tag.svg?
+.. |pic2|  image:: https://raw.githubusercontent.com/alb-garcia/svtmp/main/docs/img/tag.svg?
 
 
 svtmp - template functions for SystemVerilog
@@ -222,5 +222,5 @@ To generate the documentation (assuming the clone repository lives @ ``$SVTMP_DI
     cd $SVTMP_DIR/docs
     make html
 
-the documentation can be then accessed @ ``$NIX_SHELL_UTILS_DIR/docs/_build/html/index.htm``
+the documentation can be then accessed @ ``$SVTMP_DIR/docs/_build/html/index.htm``
     
