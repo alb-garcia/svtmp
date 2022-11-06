@@ -1,21 +1,40 @@
-#######
-svmpt
-#######
+svtmp - template functions for SystemVerilog
+==========================================================
 
-**svtmp** is a collection of SystemVerilog snippet functions for
-easy automated code generation. **svtmp** solves some problems in code generation:
+**svtmp** is a package with small templating functions for SystemVerilog. It takes care of
+indentation, header insertion in files, and 
 
-* **svtmp** snippets are composable, indent-wise: no need to care about indentation
+Dependencies
+-------------
+
+* Python version required: `3.7+`
+* If documentation is to be generated ``sphinx`` and ``sphinx_rtd_theme`` packages are required:
+
+.. code-block:: console
+
+    pip install sphinx sphinx_rtd_theme
+
+Installation
+-------------
+
+Simply type:
+
+.. code-block:: console
+		
+    pip install svtmp
+
   
-* generally **svtmp** code generation scripts are much shorter than templating solutions such as mako or jinja
+Documentation
+----------------
 
-* zero external dependencies means trivial roll-out of a SV code generation pipe.
+Documentation can be found @ `readthedocs <https://svtmp.readthedocs.io>`_
+
 
 Examples
-=========
+---------------
 
-Flip Flop
------------
+Flip Flop 
+''''''''''''''
 
 This code snippet
 
@@ -23,10 +42,13 @@ This code snippet
 		
     from svtmp import *   # import the svtmp
     t = SVTxt()           # create a SystemVerilog text instance
-    ios = inputs(['clk_i','reset_n_i','di']) + [Output('do')] #I/Os for SV module
-    
-    t.add(always_ff(eq('do',ui2b(0,1)), eq('do','di')))    #add always_ff block
-    t.to_module('dff', ios = ios)                          #wrap SV into a module
+    # I/Os for the SV module
+    ios = [Input(s) for s in 'clk_i','reset_n_i','di'] + [Output('do')]
+
+    t.add(always_ff(eq('do',ui2b(0,1)), eq('do','di'))) #add always_ff block
+
+    t.to_module('dff', ios = ios) #wrap SV into a module
+
     t.to_sv_file('dff', desc = 'Flip Flop implementation') # write to file
 
 
@@ -154,3 +176,38 @@ results in a SystemVerilog ``th_enc.sv`` file with these contents:
        end
 
     endmodule
+		
+
+Development
+---------------
+
+1. clone this repository (or download a zip and unzip it somewhere)
+
+.. code-block:: console
+
+    git clone https://github.com/alb-garcia/svtmp.git
+
+2. inside the cloned folder, make a editable installation
+   
+.. code-block:: console
+
+    pip install -e .
+
+3. To run tests (pytest needs to be installed):
+
+.. code-block:: console
+
+    cd test; pytest -vvv
+    
+Documentation Generation
+---------------------------
+    
+To generate the documentation (assuming the clone repository lives @ ``$SVTMP_DIR``:
+
+.. code-block:: console
+
+    cd $SVTMP_DIR/docs
+    make html
+
+the documentation can be then accessed @ ``$NIX_SHELL_UTILS_DIR/docs/_build/html/index.htm``
+    

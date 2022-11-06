@@ -217,7 +217,7 @@ INDENT = SVTMP_INDENTATION_WIDTH * ' '
 """ default indentation for all templates in svtmp.
 ``INDENT = SVTMP_INDENTATION_WIDTH * ' '``"""
 
-def header(name: str, fname: str, desc: str, prj: str | None = None) -> str:
+def header(name: str, fname: str, desc: str, prj: str) -> str:
     """ generates a SystemVerilog file header.
 
     The generated header automatically picks up the date of creation and if possible, the
@@ -254,7 +254,6 @@ def header(name: str, fname: str, desc: str, prj: str | None = None) -> str:
     Returns: 
         a string containing the header.
     """
-    prj = prj if prj != None else os.getenv('SUBPROJECTNAME')
     sdate = date.today().isoformat()
     syear = sdate.split('-')[0]
     return f"""/*------------------------------------------------------------------------------
@@ -291,6 +290,10 @@ def ui2b(x: int, nbits: int) -> str:
     Returns:
         a string with the SystemVerilog binary literal.
     """
+
+    if x > (2**nbits - 1) or nbits == 0:
+        raise ValueError(f'{x} cannot be represented in {nbits} bits')
+    
     return f"{nbits}'b{x:0{nbits}b}"
 
 def sui2b(x: str, nbits: int) -> str:
@@ -308,7 +311,6 @@ def sui2b(x: str, nbits: int) -> str:
     Returns:
         a string with the SystemVerilog binary literal.
     """
-    
     return ui2b(int(x), nbits)
 
 def ui2h(x: int, nbits: int) -> str:
@@ -326,9 +328,12 @@ def ui2h(x: int, nbits: int) -> str:
     Returns:
         a string with the SystemVerilog binary literal.
     """
+    if x > (2**nbits - 1) or nbits == 0:
+        raise ValueError(f'{x} cannot be represented in {nbits} bits')
     
     nhex_digits = (nbits // 4) if nbits % 4 == 0 else (nbits // 4) + 1
-    return f"{nbits}'h{x:0{nhex_digits}x}"
+    number = f"{x:0{nhex_digits}x}".upper()
+    return f"{nbits}'h{number}"
 
 def sui2h(x: str, nbits: int) -> str:
     """converts unsigned integer stings to SystemVerilog hex literals.
@@ -409,6 +414,9 @@ def invec(name:str, lhs: int | str, rhs: int | str, typ = 'logic') -> str:
 
     Returns: a string with the port definition
     """
+    if name == '':
+        raise ValueError('a port requires a non-empty string name')
+    
     return f'input {typ} [{lhs}:{rhs}] {name}'
 
 def Input(name:str,typ:str = 'logic') -> str:
@@ -429,6 +437,10 @@ def Input(name:str,typ:str = 'logic') -> str:
 
     Returns: a string with the port definition
     """
+    
+    if name == '':
+        raise ValueError('a port requires a non-empty string name')
+    
     return f'input {typ} {name}'
 
 def inputs(ins: List[str]) -> List[str]:
@@ -465,10 +477,12 @@ def Output(name:str,typ:str = 'logic') -> str:
 
     Returns: a string with the port definition
     """
+    if name == '':
+        raise ValueError('a port requires a non-empty string name')
     
     return f'output {typ} {name}'
 
-def outvec(name:str, lhs:int, rhs:int, typ = 'logic') -> str:
+def outvec(name:str, lhs:int | str, rhs:int | str, typ = 'logic') -> str:
     """ generates a packed vector output port. Used to be included in a list of ports
     and passed as argument to :meth:`module` or :meth:`SVTxt.to_module`
 
@@ -488,6 +502,8 @@ def outvec(name:str, lhs:int, rhs:int, typ = 'logic') -> str:
 
     Returns: a string with the port definition
     """
+    if name == '':
+        raise ValueError('a port requires a non-empty string name')
     
     return f'output {typ} [{lhs}:{rhs}] {name}'
 
@@ -528,6 +544,8 @@ def struct(typ : str, decls : str | List[str], packed : bool = True, debug : boo
 
     Returns: a string with the typedef struct definition
     """
+    if decls == [] or decls == '':
+        raise ValueError('struct definition cannot be empty')
     
     pk = 'packed ' if packed else ''
     ind_body = indent(_ljoin(decls))
@@ -633,17 +651,42 @@ def endif() -> str:
 def Import(pkg: str) -> str:
     return f'import {pkg}::*;'
 
-def logvec(name, lsb, rsb,cmt = ''):
-    return f'logic [{lsb}:{rsb}] {name}; {comment(cmt)}'
+def logvec(name, lsb, rsb,cmt = '', debug: bool = False):
+    if name == '':
+        raise ValueError('a declaration requires a non-empty string name')
+
+    if cmt == '':
+        s_logvec = f'logic [{lsb}:{rsb}] {name};'
+    else:
+        s_logvec = f'logic [{lsb}:{rsb}] {name}; {comment(cmt)}'
+
+    if debug:
+        log.debug(f'SVTMP - logic vector declaration: {s_logvec}')
+    return s_logvec
+        
 
 def logic(name: str, cmt: str = '', debug: bool = False):
-    s_logic = f'logic {name}; {comment(cmt)}'
+    if name == '':
+        raise ValueError('a declaration requires a non-empty string name')
+    
+    if cmt == '':
+        s_logic = f'logic {name};'
+    else:
+        s_logic = f'logic {name}; {comment(cmt)}'
+        
     if debug:
         log.debug(f'SVTMP - logic declaration: {s_logic}')
     return s_logic
 
 def decl(typ: str, name: str, cmt: str  = '', debug: bool = False):
-    s_decl = f'{typ} {name}; {comment(cmt)}'
+    if name == '':
+        raise ValueError('a declaration requires a non-empty string name')
+
+    if cmt == '':
+        s_decl = f'{typ} {name};'
+    else:    
+        s_decl = f'{typ} {name}; {comment(cmt)}'
+        
     if debug:
         log.debug(f'SVTMP - signal declaration: {s_decl}')
     return s_decl

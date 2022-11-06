@@ -4,6 +4,30 @@ svtmp - template functions for SystemVerilog
 **svtmp** is a package with small templating functions for SystemVerilog. It takes care of
 indentation, header insertion in files, and 
 
+Dependencies
+-------------
+
+* Python version required: `3.7+`
+* If documentation is to be generated ``sphinx`` and ``sphinx_rtd_theme`` packages are required:
+
+.. code-block:: console
+
+    pip install sphinx sphinx_rtd_theme
+
+Installation
+-------------
+
+Simply type ::
+
+  pip install svtmp
+
+  
+Documentation
+----------------
+
+Documentation can be found @ `readthedocs <https://svtmp.readthedocs.io>`_
+
+
 Examples
 ---------------
 
@@ -151,7 +175,44 @@ results in a SystemVerilog ``th_enc.sv`` file with these contents:
 
     endmodule
 		
-		
+
+Development
+---------------
+
+1. clone this repository (or download a zip and unzip it somewhere)
+
+.. code-block:: console
+
+    git clone https://github.com/alb-garcia/svtmp.git
+
+2. inside the cloned folder, make a editable installation
+   
+.. code-block:: console
+
+    pip install -e .
+
+3. To run tests (pytest needs to be installed):
+
+.. code-block:: console
+
+    cd test; pytest -vvv
+    
+Documentation Generation
+---------------------------
+    
+To generate the documentation (assuming the clone repository lives @ ``$SVTMP_DIR``:
+
+.. code-block:: console
+
+    cd $SVTMP_DIR/docs
+    make html
+
+the documentation can be then accessed @ ``$NIX_SHELL_UTILS_DIR/docs/_build/html/index.htm``
+
+    
+Package Documentation
+===========================================
+   
 .. toctree::
    :maxdepth: 1
 
