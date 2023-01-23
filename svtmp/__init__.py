@@ -354,7 +354,6 @@ def sui2h(x: str, nbits: int) -> str:
     
     return ui2h(int(x), nbits)
 
-
 def comment(comment: str) -> str:
     """ returns a single line comment.
 
@@ -914,13 +913,17 @@ class SVTxt(object):
         self.txt = package(name, self.txt)
 
 
-    def to_sv_file(self, name : str, desc : str = '', prj : str | None = None):
-        prj = prj if prj != None else os.getenv('SUBPROJECTNAME')
-        fname = name + '.sv'
-        h = header(name = name, fname = name + '.sv', desc = desc, prj = prj)
+    def to_sv_file(self, name : str,
+                   path : str = '.',
+                   desc : str = '',
+                   prj : str | None = None):
+
+        fname = name + '.svh'
+        
+        h = header(name, fname = fname, desc = desc, prj = prj)
         
         try:
-            with open(fname, 'w') as fout:
+            with open(os.path.join(path, fname), 'w') as fout:
                 print(h + '\n' + self.txt, file = fout)
         except FileNotFoundError:
             log.error(f'SVTMP - cannot find {fname}. Exiting.')
@@ -929,14 +932,20 @@ class SVTxt(object):
             log.error(f'SVTMP - permission denied to open {fname}. Exiting.')
             exit(1)
 
-    def to_svh_file(self, name : str, desc : str = '', prj : str | None = None):
-        sguard = '_'+name.upper()+'_'
+    def to_svh_file(self, name : str,
+                    path : str = '.',
+                    desc : str = '',
+                    prj : str | None = None,
+                    noheader: bool = False):
+
+        fname = os.path.join(path, name + '.svh')
         
-        prj = prj if prj != None else os.getenv('SUBPROJECTNAME')
+        sguard = '_' + name.upper()+'_SVH_'
         
-        fname = name + '.svh'
-        
-        h = header(name = name, fname = name + '.svh', desc = desc, prj = prj)
+        if noheader:
+            h = ''
+        else:
+            h = header(name = name, fname = name + '.svh', desc = desc, prj = prj)
         
         self.txt = ifndef(sguard) + '\n' + define(sguard) +'\n\n' + h + '\n' + self.txt + '\n`endif'
 
